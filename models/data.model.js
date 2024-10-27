@@ -19,18 +19,6 @@ const Data = sequelize.define('Data', {
         type: DataTypes.TEXT,
         allowNull: true,
     },
-    category: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
-    priority: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-    },
-    isPublic: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-    },
 });
 
 export default Data;
