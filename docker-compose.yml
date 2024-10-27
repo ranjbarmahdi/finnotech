@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - '3000:3000'
+        depends_on:
+            rabbitmq:
+                condition: service_healthy
+            database:
+                condition: service_started
+        # networks:
+        #     - finnotech
+
+    rabbitmq:
+        image: rabbitmq:3-management
+        ports:
+            - '5672:5672'
+            - '15672:15672'
+        healthcheck:
+            test: ['CMD', 'rabbitmqctl', 'status']
+            interval: 10s
+            retries: 5
+            start_period: 10s
+            timeout: 5s
+        # networks:
+        #     - finnotech
+
+    database:
+        image: postgres:14
+        restart: always
+        environment:
+            POSTGRES_PASSWORD: mehdi@1234
+        volumes:
+            - ./docker/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
+        ports:
+            - '5432:5432'
+        # networks:
+        #     - finnotech
+# networks:
+#     finnotech:
+#         external: true
+#         driver: bridge
